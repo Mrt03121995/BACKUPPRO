@@ -4,7 +4,9 @@
 - **SMART:** Spezifisch · Messbar · Attraktiv · Realistisch · Terminiert
 
 ## Ausgangslage
-…
+
+Schreibe ein Skript mit einer kleinen Dokumentation.
+
 
 ## Zielformulierung / To-dos
 
@@ -14,6 +16,15 @@
 4. Das skript sollte erläutertert werden was wo gemacht wird 
 
 ## Meilensteine & Termine
+- 2025-01-15: …
+
+## Kennzahlen (KPIs)
+- KPI: … — Zielwert: …
+
+## Risiken & Annahmen
+- Risiko: … — Gegenmaßnahme: …
+
+  ## Meilensteine & Termine
 - 2025-01-15: …
 
 ## Kennzahlen (KPIs)
