@@ -1,1 +1,19 @@
 
+# Backuppro
+- **Backuppro:** …
+- **SMART:** Spezifisch · Messbar · Attraktiv · Realistisch · Terminiert
+
+## Ausgangslage
+…
+
+## Zielformulierung / To-dos
+- [ ] …
+
+## Meilensteine & Termine
+- 2025-01-15: …
+
+## Kennzahlen (KPIs)
+- KPI: … — Zielwert: …
+
+## Risiken & Annahmen
+- Risiko: … — Gegenmaßnahme: …
