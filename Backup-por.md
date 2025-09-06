@@ -19,8 +19,8 @@ Schreibe ein Skript mit einer kleinen Dokumentation.
 ## Vorausetzung 
 # installierte poackete
 
-1.SSH Sehrver 
-2. sshpass
+# 1. SSH Server 
+# 2. sshpass
 
 sudo apt-get update
 sudo apt-get install -y sshpass
@@ -31,72 +31,11 @@ sudo systemctl enable --now ssh                 # Dienst starten & beim Boot akt
 sudo systemctl status ssh                       # Status prüfen
 
 
-## Bsckup code Beschreibung
-- 2025-09-06:
-
-#!/usr/bin/env bash
-set -Eeuo pipefail
-
-# === Quelle/Ziel ===
-REMOTE_USER="marcel"
-REMOTE_HOST="192.168.1.117"
-REMOTE_FILE="/home/marcel/b1.txt"
-LOCAL_DIR="/home/Desktop/Desktop/backuppool "
-
-# === SSH-Setup ===
-SSH_PORT=22
-SSH_KEY=""              # z.B. /home/server1/.ssh/id_ed25519; leer = Standard-Key/Agent
-# Falls du mit sudo startest und keinen SSH_KEY setzt, versuche Benutzer-Key zu verwenden:
-if [[ -z "${SSH_KEY}" && "${SUDO_USER-}" && -r "/home/${SUDO_USER}/.ssh/id_ed25519" ]]; then
-  SSH_KEY="/home/${SUDO_USER}/.ssh/id_ed25519"
-fi
-
-# === OPTIONAL: Passwort-Login via sshpass (unsicherer als Key-Login) ===
-PASSWORD="marcel"             # direkt hier eintragen (sichtbar in Prozessliste) – besser leer lassen
-PASSWORD_FILE=""        # oder: Pfad zu einer Datei mit NUR dem Passwort (sicherer als oben), z.B. /root/.ssh/remote_pw
-
-# === Vorbereitung ===
-mkdir -p "$LOCAL_DIR"
-
-SSH_OPTS=(-p "$SSH_PORT" -o StrictHostKeyChecking=accept-new -o ConnectTimeout=10)
-[[ -n "$SSH_KEY" ]] && SSH_OPTS+=(-i "$SSH_KEY")
-
-# Prefix für ssh/rsync, wenn Passwort verwendet wird
-SSHPASS_PREFIX=()
-if [[ -n "$PASSWORD_FILE" ]]; then
-  SSHPASS_PREFIX=(sshpass -f "$PASSWORD_FILE")
-elif [[ -n "$PASSWORD" ]]; then
-  SSHPASS_PREFIX=(sshpass -p "$PASSWORD")
-fi
-# Prüfen, ob sshpass vorhanden ist, wenn benötigt
-if [[ ${#SSHPASS_PREFIX[@]} -gt 0 ]]; then
-  command -v sshpass >/dev/null || { echo "FEHLER: sshpass ist nicht installiert."; exit 3; }
-fi
-
-# === Checks & Kopie ===
-# Existenz/Lesbarkeit remote prüfen
-"${SSHPASS_PREFIX[@]}" ssh "${SSH_OPTS[@]}" "$REMOTE_USER@$REMOTE_HOST" "test -r '$REMOTE_FILE'"
-
-# Kopieren (rsync ist robust; alternativ ginge scp)
-BASENAME=$(basename "$REMOTE_FILE")
-TARGET="$LOCAL_DIR/$BASENAME"
-RSYNC_SSH="ssh ${SSH_OPTS[*]}"
-"${SSHPASS_PREFIX[@]}" rsync -a --partial --inplace --progress \
-  -e "$RSYNC_SSH" "$REMOTE_USER@$REMOTE_HOST:$REMOTE_FILE" "$TARGET"
-
-# Integritätscheck (SHA256)
-remote_sum=$("${SSHPASS_PREFIX[@]}" ssh "${SSH_OPTS[@]}" "$REMOTE_USER@$REMOTE_HOST" "sha256sum '$REMOTE_FILE' | awk '{print \$1}'")
-local_sum=$(sha256sum "$TARGET" | awk '{print $1}')
-if [[ "$remote_sum" != "$local_sum" ]]; then
-  echo "FEHLER: Checksumme stimmt nicht überein!" >&2
-  exit 2
-fi
-
-echo "$(date -Iseconds) – Backup ok: $TARGET (sha256 $local_sum)" | tee -a /var/log/remote_b1_backup.log
+## Backupcode Beschreibung
 
   NR2___________________________________________________________________________
 
-  #!/usr/bin/env bash
+#!/usr/bin/env bash
 set -Eeuo pipefail
 
 # ================================
@@ -216,6 +155,11 @@ echo "$msg"
 
 
 ## Automatisierung
+<img width="1352" height="978" alt="image" src="https://github.com/user-attachments/assets/aad00f5c-6188-4a98-b985-07fffe7f31ea" />
+<img width="1451" height="882" alt="image" src="https://github.com/user-attachments/assets/258c9e18-71a7-414b-b841-ce655a23c965" />
+<img width="1603" height="899" alt="image" src="https://github.com/user-attachments/assets/72915b07-31b4-4023-8bf5-5673911a2bb7" />
+<img width="1571" height="244" alt="image" src="https://github.com/user-attachments/assets/0c9c4a85-7d28-4d8f-b81f-1f7c7bdd0bf1" />
+
 
 - KPI: … — Zielwert: …
 
