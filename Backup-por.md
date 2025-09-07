@@ -19,22 +19,22 @@ localhost Server (192.168.1.120)
 ## Umgebungsvariabeln
 Datei "b1.txt" ist von dem Remote-pc auf den localserver zu backupen.
 
-# Zu installierende Pakete
+## Zu installierende Pakete
 Remote-Gerät (192.168.1.117): openssh-server
 sudo apt update
 
-# --- Remote-Gerät: SSH-Server installieren & aktivieren ---
+### --- Remote-Gerät: SSH-Server installieren & aktivieren ---
 sudo apt install -y openssh-server
 sudo systemctl enable --now ssh         # Dienst starten & beim Boot aktivieren
 systemctl status ssh --no-pager         # Status prüfen
 
-# --- Skript-Rechner: sshpass installieren (optional) ---
+### --- Skript-Rechner: sshpass installieren (optional) ---
 sudo apt install -y sshpass
 sshpass -V                              # Version prüfen (optional)
 
 
 ## Backupcode + Beschreibung
-# Source-Code
+### Source-Code
 #!/usr/bin/env bash
 set -Eeuo pipefail
 
@@ -53,7 +53,7 @@ LOG_FILE="/var/log/remote_b1_backup.log"   # Logdatei (Root-Recht nötig)
 SSH_PORT=22
 SSH_KEY=""                                  # Angeben wenn du mitels SSH-Schlüssel die anmelden wilst. z.b /home/server1/.ssh/id_ed25519; leer -> Standard-Key/Agent
 
-# Optional: Wenn das Skript per sudo läuft und kein SSH_KEY gesetzt ist, versuche Benutzer-Key zu nutzen.
+## Optional: Wenn das Skript per sudo läuft und kein SSH_KEY gesetzt ist, versuche Benutzer-Key zu nutzen.
 if [[ -z "${SSH_KEY}" && "${SUDO_USER-}" && -r "/home/${SUDO_USER}/.ssh/id_ed25519" ]]; then
   SSH_KEY="/home/${SUDO_USER}/.ssh/id_ed25519"
 fi
@@ -154,20 +154,19 @@ echo "$msg"
 { echo "$msg"; } | tee -a "$LOG_FILE" >/dev/null || true
 
 
-## Automatisierung
 
-# Automatisierung mitels crontab
+## Automatisierung mitels crontab
 
 crontab -e
 
-# Code 
+### Code 
 
 SHELL=/bin/bash
 HOME=/home/marcel/Desktop/Automatisation
 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 MAILTO=""
 
-# TÄGLICH um 13:00 Uhr ausführen
+### TÄGLICH um 13:00 Uhr ausführen
 00 13 * * * /home/marcel/Desktop/Automatisation/Backup2.bash >> /home/marcel/Desktop/Automatisation/Backup2.log 2>&1
 
 
