@@ -173,3 +173,5 @@ Oft reicht es schon, einfach zu wissen, dass es beispielsweise crontab gibt, mit
 Das fertige Skript lässt sich flexibel an die jeweiligen Anforderungen anpassen – etwa indem es ein TAR-Archiv erstellt und dieses automatisch an einen anderen Speicherort kopiert.
 
 
+
+
