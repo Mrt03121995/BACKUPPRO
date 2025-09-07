@@ -1,59 +1,59 @@
 
 # Backup-pro
-- **Backuppro:** …
-- **SMART:** Spezifisch · Messbar · Attraktiv · Realistisch · Terminiert
 
 ## Ausgangslage
 
-Schreibe ein Skript mit einer kleinen Dokumentation.
+Schreiben eines Skripts mit einer kleinen Dokumentation.
 
-
-## Zielformulierung / To-dos
+## Zielformulierung
 
 1. Es soll ein Skript für ein Backup task erstellt werden.
-2. Im Backup nahme soll die Uhrzeit stehen.
-3. Es soll dazu die Automatiserung und installation des Skript erläutert werden.
-4. Das skript sollte erläutertert werden was wo gemacht wird 
+2. Im Backup nahme soll das Erstellungsdatum stehen.
+3. Der Code sollte erläutert werden, was dieser macht.
+4. Die Automatisierung wird auch Dokumentiert
 
+## Infrastuktur 
+localhost Server (192.168.1.120)
+(Remote) Pc (192.168.1.117)
 
-## Vorausetzung 
-# installierte poackete
+## Umgebungsvariabeln
+Datei "b1.txt" ist von dem Remote-pc auf den localserver zu backupen.
 
-# 1. SSH Server 
-# 2. sshpass
-
-sudo apt-get update
-sudo apt-get install -y sshpass
+# Zu installierende Pakete
+Remote-Gerät (192.168.1.117): openssh-server
 sudo apt update
 
-sudo apt install openssh-server                 # Server installieren
-sudo systemctl enable --now ssh                 # Dienst starten & beim Boot aktivieren
-sudo systemctl status ssh                       # Status prüfen
+# --- Remote-Gerät: SSH-Server installieren & aktivieren ---
+sudo apt install -y openssh-server
+sudo systemctl enable --now ssh         # Dienst starten & beim Boot aktivieren
+systemctl status ssh --no-pager         # Status prüfen
+
+# --- Skript-Rechner: sshpass installieren (optional) ---
+sudo apt install -y sshpass
+sshpass -V                              # Version prüfen (optional)
 
 
-## Backupcode Beschreibung
-
-  NR2___________________________________________________________________________
-
+## Backupcode + Beschreibung
+# Source-Code
 #!/usr/bin/env bash
 set -Eeuo pipefail
 
 # ================================
 #   Einstellungen Quelle / Ziel
 # ================================
-REMOTE_USER="marcel"                        # Remote-User
-REMOTE_HOST="192.168.1.117"                # Remote-Host / IP
-REMOTE_FILE="/home/marcel/b1.txt"          # Remote-Datei
-LOCAL_DIR="/home/marcel/Desktop/backuppool"  # Lokaler Zielordner (ohne Leerzeichen!)
-LOG_FILE="/var/log/remote_b1_backup.log"   # Logdatei (Root-Rechte nötig)
+REMOTE_USER="marcel"                       # Remote-User*
+REMOTE_HOST="192.168.1.117"                # Remote-Host / IP*
+REMOTE_FILE="/home/marcel/b1.txt"          # Remote-Datei Die zu Backupen ist*
+LOCAL_DIR="/home/marcel/Desktop/backuppool"  # Lokaler Zielordner der gebacupten datei (ohne Leerzeichen!)*
+LOG_FILE="/var/log/remote_b1_backup.log"   # Logdatei (Root-Recht nötig)
 
 # ================================
 #   SSH-Setup
 # ================================
 SSH_PORT=22
-SSH_KEY=""                                  # z.B. /home/server1/.ssh/id_ed25519; leer -> Standard-Key/Agent
+SSH_KEY=""                                  # Angeben wenn du mitels SSH-Schlüssel die anmelden wilst. z.b /home/server1/.ssh/id_ed25519; leer -> Standard-Key/Agent
 
-# Wenn das Skript per sudo läuft und kein SSH_KEY gesetzt ist, versuche Benutzer-Key zu nutzen.
+# Optional: Wenn das Skript per sudo läuft und kein SSH_KEY gesetzt ist, versuche Benutzer-Key zu nutzen.
 if [[ -z "${SSH_KEY}" && "${SUDO_USER-}" && -r "/home/${SUDO_USER}/.ssh/id_ed25519" ]]; then
   SSH_KEY="/home/${SUDO_USER}/.ssh/id_ed25519"
 fi
@@ -62,13 +62,13 @@ fi
 #   OPTIONAL: Passwort-Login (sshpass)
 #   Sicherer ist Key-Login -> beide Felder leer lassen!
 # ================================
-PASSWORD=""               # Achtung: im Prozess sichtbar – möglichst leer lassen
+PASSWORD=""               # Möglichkeit: Passwort anzugeben.
 PASSWORD_FILE=""          # Besser: Datei mit NUR dem Passwort, z.B. /root/.ssh/remote_pw (600)
 
 # ================================
 #   Vorbereitung
 # ================================
-mkdir -p "$LOCAL_DIR"
+mkdir -p "$LOCAL_DIR"     # Setzt angegebener Speicherort.
 
 # SSH-Optionen (Fingerprints beim ersten Mal automatisch annehmen)
 SSH_OPTS=(-p "$SSH_PORT" -o StrictHostKeyChecking=accept-new -o ConnectTimeout=10)
@@ -155,13 +155,26 @@ echo "$msg"
 
 
 ## Automatisierung
-<img width="1352" height="978" alt="image" src="https://github.com/user-attachments/assets/aad00f5c-6188-4a98-b985-07fffe7f31ea" />
-<img width="1451" height="882" alt="image" src="https://github.com/user-attachments/assets/258c9e18-71a7-414b-b841-ce655a23c965" />
-<img width="1603" height="899" alt="image" src="https://github.com/user-attachments/assets/72915b07-31b4-4023-8bf5-5673911a2bb7" />
-<img width="1571" height="244" alt="image" src="https://github.com/user-attachments/assets/0c9c4a85-7d28-4d8f-b81f-1f7c7bdd0bf1" />
+
+# Automatisierung mitels crontab
+
+crontab -e
+
+# Code 
+
+SHELL=/bin/bash
+HOME=/home/marcel/Desktop/Automatisation
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+MAILTO=""
+
+# TÄGLICH um 13:00 Uhr ausführen
+00 13 * * * /home/marcel/Desktop/Automatisation/Backup2.bash >> /home/marcel/Desktop/Automatisation/Backup2.log 2>&1
 
 
-- KPI: … — Zielwert: …
+
+Aktuelle Ausgabe
+ls
+
 
 ## Risiken & Annahmen
 - Risiko: … — Gegenmaßnahme: …
