@@ -33,7 +33,7 @@ sudo apt install -y sshpass
 sshpass -V                              # Version prüfen (optional)
 
 
-## Backupcode + Beschreibung
+## Backupcode (backup.sh) und Beschreibung
 ### Source-Code
 #!/usr/bin/env bash
 set -Eeuo pipefail
