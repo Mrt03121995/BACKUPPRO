@@ -12,14 +12,14 @@ Schreiben eines Skripts mit einer kleinen Dokumentation.
 3. Der Code sollte erläutert werden, was dieser macht.
 4. Die Automatisierung wird auch Dokumentiert
 
-## Infrastuktur 
+### Infrastuktur 
 localhost Server (192.168.1.120)
 (Remote) Pc (192.168.1.117)
 
-## Umgebungsvariabeln
+### Umgebungsvariabeln
 Datei "b1.txt" ist von dem Remote-pc auf den localserver zu backupen.
 
-## Zu installierende Pakete
+### Zu installierende Pakete
 Remote-Gerät (192.168.1.117): openssh-server
 sudo apt update
 
@@ -38,18 +38,18 @@ sshpass -V                              # Version prüfen (optional)
 #!/usr/bin/env bash
 set -Eeuo pipefail
 
-# ================================
-#   Einstellungen Quelle / Ziel
-# ================================
-REMOTE_USER="marcel"                       # Remote-User*
-REMOTE_HOST="192.168.1.117"                # Remote-Host / IP*
-REMOTE_FILE="/home/marcel/b1.txt"          # Remote-Datei Die zu Backupen ist*
-LOCAL_DIR="/home/marcel/Desktop/backuppool"  # Lokaler Zielordner der gebacupten datei (ohne Leerzeichen!)*
-LOG_FILE="/var/log/remote_b1_backup.log"   # Logdatei (Root-Recht nötig)
+#### ================================
+####   Einstellungen Quelle / Ziel
+#### ================================
+REMOTE_USER="marcel"                       #### Remote-User*
+REMOTE_HOST="192.168.1.117"                #### Remote-Host / IP*
+REMOTE_FILE="/home/marcel/b1.txt"          #### Remote-Datei Die zu Backupen ist*
+LOCAL_DIR="/home/marcel/Desktop/backuppool"  #### Lokaler Zielordner der gebacupten datei (ohne Leerzeichen!)*
+LOG_FILE="/var/log/remote_b1_backup.log"   #### Logdatei (Root-Recht nötig)
 
-# ================================
-#   SSH-Setup
-# ================================
+#### ================================
+####   SSH-Setup
+#### ================================
 SSH_PORT=22
 SSH_KEY=""                                  # Angeben wenn du mitels SSH-Schlüssel die anmelden wilst. z.b /home/server1/.ssh/id_ed25519; leer -> Standard-Key/Agent
 
