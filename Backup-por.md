@@ -155,28 +155,25 @@ echo "$msg"
 
 
 
-### Automatisierung mitels crontab
-
+## Automatisierung mitels crontab
 crontab -e
 
 ### Code 
-
 SHELL=/bin/bash
-HOME=/home/marcel/Desktop/Automatisation
+HOME=/home/marcel/Desktop/Automatisation  # Homepfad
 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 MAILTO=""
 
-### TÄGLICH um 13:00 Uhr ausführen
-00 13 * * * /home/marcel/Desktop/Automatisation/Backup2.bash >> /home/marcel/Desktop/Automatisation/Backup2.log 2>&1
+### Täglich um 13:10 Uhr ausführen
+10 13 * * * /home/marcel/Desktop/Automatisation/Backup2.bash >> /home/marcel/Desktop/Automatisation/Backup2.log 2>&1
+
+## Fazit
 
 
 
-Aktuelle Ausgabe
-ls
 
 
-## Risiken & Annahmen
-- Risiko: … — Gegenmaßnahme: …
+
 
   ## Meilensteine & Termine
 - 2025-01-15: …
