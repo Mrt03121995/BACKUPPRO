@@ -16,19 +16,19 @@ Schreiben eines Skripts mit einer kleinen Dokumentation.
 localhost Server (192.168.1.120)
 (Remote) Pc (192.168.1.117)
 
-### Umgebungsvariabeln
+#### Umgebungsvariablen
 Datei "b1.txt" ist von dem Remote-pc auf den localserver zu backupen.
 
-### Zu installierende Pakete
+#### Pakete, die installiert werden sollen
 Remote-Gerät (192.168.1.117): openssh-server
 sudo apt update
 
-### --- Remote-Gerät: SSH-Server installieren & aktivieren ---
+#### --- Remote-Gerät: SSH-Server installieren & aktivieren ---
 sudo apt install -y openssh-server
 sudo systemctl enable --now ssh         # Dienst starten & beim Boot aktivieren
 systemctl status ssh --no-pager         # Status prüfen
 
-### --- Skript-Rechner: sshpass installieren (optional) ---
+#### --- Skript-Rechner: sshpass installieren (optional) ---
 sudo apt install -y sshpass
 sshpass -V                              # Version prüfen (optional)
 
@@ -62,13 +62,13 @@ fi
 ####   OPTIONAL: Passwort-Login (sshpass)
 ####   Sicherer ist Key-Login -> beide Felder leer lassen!
 #### ================================
-PASSWORD=""               # Möglichkeit: Passwort anzugeben.
-PASSWORD_FILE=""          # Besser: Datei mit NUR dem Passwort, z.B. /root/.ssh/remote_pw (600)
+PASSWORD=""                                 # Möglichkeit: Passwort anzugeben.
+PASSWORD_FILE=""                            # Besser: Datei mit NUR dem Passwort, z.B. /root/.ssh/remote_pw (600)
 
 #### ================================
 ####   Vorbereitung
 #### ================================
-mkdir -p "$LOCAL_DIR"     # Setzt angegebener Speicherort.
+mkdir -p "$LOCAL_DIR"                       # Setzt angegebener Speicherort.
 
 #### SSH-Optionen (Fingerprints beim ersten Mal automatisch annehmen)
 SSH_OPTS=(-p "$SSH_PORT" -o StrictHostKeyChecking=accept-new -o ConnectTimeout=10)
@@ -153,9 +153,7 @@ echo "$msg"
 #### Ins Log schreiben (falls Pfad beschreibbar ist)
 { echo "$msg"; } | tee -a "$LOG_FILE" >/dev/null || true
 
-
-
-## Automatisierung mitels crontab
+## Automatisierung mittels crontab
 crontab -e
 
 ### Code 
@@ -168,18 +166,10 @@ MAILTO=""
 10 13 * * * /home/marcel/Desktop/Automatisation/Backup2.bash >> /home/marcel/Desktop/Automatisation/Backup2.log 2>&1
 
 ## Fazit
+Die Erstellung des Skripts war für mich zunächst Neuland unter Bash. 
+Durch gezielte Recherche konnte ich jedoch wertvolle Kenntnisse gewinnen und mein Verständnis vertiefen. 
+Sehr hilfreich waren dabei die Grundkenntnisse, die wir in der Schule besprochen haben. 
+Oft reicht es schon, einfach zu wissen, dass es beispielsweise crontab gibt, mit dem man solche Skripte automatisieren kann. 
+Das fertige Skript lässt sich flexibel an die jeweiligen Anforderungen anpassen – etwa indem es ein TAR-Archiv erstellt und dieses automatisch an einen anderen Speicherort kopiert.
 
 
-
-
-
-
-
-  ## Meilensteine & Termine
-- 2025-01-15: …
-
-## Kennzahlen (KPIs)
-- KPI: … — Zielwert: …
-
-## Risiken & Annahmen
-- Risiko: … — Gegenmaßnahme: …
