@@ -21,7 +21,7 @@ Schreiben eines Skripts mit einer kleinen Dokumentation.
 
 #### Pakete, die installiert werden sollen
 - Remote-Gerät (192.168.1.117): openssh-server
-- sshpass loclhost
+- sshpass localhost
 
 #### --- Remote-Gerät: SSH-Server installieren & aktivieren ---
 sudo apt install -y openssh-server
