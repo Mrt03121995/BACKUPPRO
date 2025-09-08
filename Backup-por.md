@@ -111,16 +111,16 @@ TS_HUMAN=$(date -u -d "@${used_epoch}" "+%Y-%m-%dT%H%M%SZ")
 ### ================================
 ###   Zieldateinamen mit Datum bauen
 ### ================================
-#### Original-Basename zerlegen: Name + Erweiterung
+##### Original-Basename zerlegen: Name + Erweiterung
 BASENAME=$(basename "$REMOTE_FILE")
 if [[ "$BASENAME" == .* || "$BASENAME" != *.* ]]; then
-  ##### Keine/verborgene Erweiterung -> einfach Suffix anhängen
+  ###### Keine/verborgene Erweiterung -> einfach Suffix anhängen
   NAME="$BASENAME"
   EXT=""
 else
   NAME="${BASENAME%.*}"
   EXT=".${BASENAME##*.}"fi
-#### Ziel: name_TIMESTAMP.ext  (z.B. b1_2025-09-04T082206Z.txt)
+##### Ziel: name_TIMESTAMP.ext  (z.B. b1_2025-09-04T082206Z.txt)
 TARGET="$LOCAL_DIR/${NAME}_${TS_HUMAN}${EXT}"
 
 ### ================================
