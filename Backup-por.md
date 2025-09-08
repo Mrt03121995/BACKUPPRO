@@ -106,8 +106,7 @@ else
   used_label="mtime"
 fi
 
-##### 3) Zeitstempel hübsch formatieren (UTC, ISO-ähnlich, ohne Doppelpunkte für Dateinamen)
-#####    Beispiel: 2025-09-04T082206Z
+##### 3) Zeitstempel hübsch formatieren (UTC, ISO-ähnlich, ohne Doppelpunkte für Dateinamen) Beispiel: 2025-09-04T082206Z
 TS_HUMAN=$(date -u -d "@${used_epoch}" "+%Y-%m-%dT%H%M%SZ")
 
 #### ================================
@@ -122,7 +121,6 @@ if [[ "$BASENAME" == .* || "$BASENAME" != *.* ]]; then
 else
   NAME="${BASENAME%.*}"
   EXT=".${BASENAME##*.}"fi
-
 ##### Ziel: name_TIMESTAMP.ext  (z.B. b1_2025-09-04T082206Z.txt)
 TARGET="$LOCAL_DIR/${NAME}_${TS_HUMAN}${EXT}"
 
