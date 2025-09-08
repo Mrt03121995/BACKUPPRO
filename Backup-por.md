@@ -52,7 +52,7 @@ LOG_FILE="/var/log/remote_b1_backup.log"   # Logdatei (Root-Recht nötig)
 SSH_PORT=22
 SSH_KEY=""                                  # Angeben wenn du mitels SSH-Schlüssel die anmelden wilst. z.b /home/server1/.ssh/id_ed25519; leer -> Standard-Key/Agent
 
-#### Optional: Wenn das Skript per sudo läuft und kein SSH_KEY gesetzt ist, versuche Benutzer-Key zu nutzen.
+###### Optional: Wenn das Skript per sudo läuft und kein SSH_KEY gesetzt ist, versuche Benutzer-Key zu nutzen.
 if [[ -z "${SSH_KEY}" && "${SUDO_USER-}" && -r "/home/${SUDO_USER}/.ssh/id_ed25519" ]]; then
   SSH_KEY="/home/${SUDO_USER}/.ssh/id_ed25519"
 fi
