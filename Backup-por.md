@@ -91,9 +91,9 @@ fi
 "${SSHPASS_PREFIX[@]}" ssh "${SSH_OPTS[@]}" "$REMOTE_USER@$REMOTE_HOST" "test -r '$REMOTE_FILE'"
 
 ##### 2) Zeitstempel der Remote-Datei ermitteln:
-#####    - %W = Birth/Erschaffung in EPOCH (sek)  (-1 falls nicht verfügbar)
-#####    - %Y = Mtime/Änderungszeit in EPOCH (sek)
-#####    Wir nutzen Birth, falls vorhanden; sonst Mtime.
+######    - %W = Birth/Erschaffung in EPOCH (sek)  (-1 falls nicht verfügbar)
+######    - %Y = Mtime/Änderungszeit in EPOCH (sek)
+######    Wir nutzen Birth, falls vorhanden; sonst Mtime.
 ts_line=$("${SSHPASS_PREFIX[@]}" ssh "${SSH_OPTS[@]}" "$REMOTE_USER@$REMOTE_HOST" "stat -c '%W %Y' '$REMOTE_FILE'")
 birth_epoch=$(awk '{print $1}' <<<"$ts_line")
 mtime_epoch=$(awk '{print $2}' <<<"$ts_line")
