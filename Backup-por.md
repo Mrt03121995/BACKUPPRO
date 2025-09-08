@@ -80,7 +80,7 @@ if [[ -n "$PASSWORD_FILE" ]]; then
 elif [[ -n "$PASSWORD" ]]; then
   SSHPASS_PREFIX=(sshpass -p "$PASSWORD")
 fi
-##### Prüfen, ob sshpass installiert ist, wenn gebraucht
+#### Prüfen, ob sshpass installiert ist, wenn gebraucht
 if [[ ${#SSHPASS_PREFIX[@]} -gt 0 ]]; then
   command -v sshpass >/dev/null || { echo "FEHLER: sshpass ist nicht installiert."; exit 3; }
 fi
