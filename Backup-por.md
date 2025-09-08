@@ -61,16 +61,16 @@ if [[ -z "${SSH_KEY}" && "${SUDO_USER-}" && -r "/home/${SUDO_USER}/.ssh/id_ed255
 fi
 
 
-#### ================================
-####   OPTIONAL: Passwort-Login (sshpass)  Sicherer ist Key-Login -> beide Felder leer lassen!
-#### ================================
+### ================================
+###   OPTIONAL: Passwort-Login (sshpass)  Sicherer ist Key-Login -> beide Felder leer lassen!
+### ================================
 PASSWORD=""                                 # Möglichkeit: Passwort anzugeben.
 PASSWORD_FILE=""                            # Besser: Datei mit NUR dem Passwort, z.B. /root/.ssh/remote_pw (600)
 
 
-#### ================================
-####   Vorbereitung
-#### ================================
+### ================================
+###   Vorbereitung
+### ================================
 mkdir -p "$LOCAL_DIR"                       # Setzt angegebener Speicherort.
 
 #### SSH-Optionen (Fingerprints beim ersten Mal automatisch annehmen)
@@ -90,17 +90,17 @@ if [[ ${#SSHPASS_PREFIX[@]} -gt 0 ]]; then
   command -v sshpass >/dev/null || { echo "FEHLER: sshpass ist nicht installiert."; exit 3; }
 fi
 
-#### ================================
-####   Checks: Existenz + Zeitstempel
-#### ================================
-##### 1) Sicherstellen, dass die Datei remote existiert und lesbar ist
+### ================================
+###   Checks: Existenz + Zeitstempel
+### ================================
+#### 1) Sicherstellen, dass die Datei remote existiert und lesbar ist
 "${SSHPASS_PREFIX[@]}" ssh "${SSH_OPTS[@]}" "$REMOTE_USER@$REMOTE_HOST" "test -r '$REMOTE_FILE'"
 
 
-###### 2) Zeitstempel der Remote-Datei ermitteln:
-######    - %W = Birth/Erschaffung in EPOCH (sek)  (-1 falls nicht verfügbar)
-######    - %Y = Mtime/Änderungszeit in EPOCH (sek)
-######    Wir nutzen Birth, falls vorhanden; sonst Mtime.
+##### 2) Zeitstempel der Remote-Datei ermitteln:
+#####    - %W = Birth/Erschaffung in EPOCH (sek)  (-1 falls nicht verfügbar)
+#####    - %Y = Mtime/Änderungszeit in EPOCH (sek)
+#####    Wir nutzen Birth, falls vorhanden; sonst Mtime.
 ts_line=$("${SSHPASS_PREFIX[@]}" ssh "${SSH_OPTS[@]}" "$REMOTE_USER@$REMOTE_HOST" "stat -c '%W %Y' '$REMOTE_FILE'")
 birth_epoch=$(awk '{print $1}' <<<"$ts_line")
 mtime_epoch=$(awk '{print $2}' <<<"$ts_line")
@@ -113,14 +113,14 @@ else
 fi
 
 
-##### 3) Zeitstempel hübsch formatieren (UTC, ISO-ähnlich, ohne Doppelpunkte für Dateinamen) Beispiel: 2025-09-04T082206Z
+#### 3) Zeitstempel hübsch formatieren (UTC, ISO-ähnlich, ohne Doppelpunkte für Dateinamen) Beispiel: 2025-09-04T082206Z
 TS_HUMAN=$(date -u -d "@${used_epoch}" "+%Y-%m-%dT%H%M%SZ")
 
 
-#### ================================
-####   Zieldateinamen mit Datum bauen
-#### ================================
-##### Original-Basename zerlegen: Name + Erweiterung
+### ================================
+###   Zieldateinamen mit Datum bauen
+### ================================
+#### Original-Basename zerlegen: Name + Erweiterung
 BASENAME=$(basename "$REMOTE_FILE")
 if [[ "$BASENAME" == .* || "$BASENAME" != *.* ]]; then
   ##### Keine/verborgene Erweiterung -> einfach Suffix anhängen
@@ -129,21 +129,21 @@ if [[ "$BASENAME" == .* || "$BASENAME" != *.* ]]; then
 else
   NAME="${BASENAME%.*}"
   EXT=".${BASENAME##*.}"fi
-##### Ziel: name_TIMESTAMP.ext  (z.B. b1_2025-09-04T082206Z.txt)
+#### Ziel: name_TIMESTAMP.ext  (z.B. b1_2025-09-04T082206Z.txt)
 TARGET="$LOCAL_DIR/${NAME}_${TS_HUMAN}${EXT}"
 
 
-#### ================================
-####   Kopieren (rsync via ssh)
-#### ================================
+### ================================
+###   Kopieren (rsync via ssh)
+### ================================
 RSYNC_SSH="ssh ${SSH_OPTS[*]}"
 "${SSHPASS_PREFIX[@]}" rsync -a --partial --inplace --progress \
   -e "$RSYNC_SSH" "$REMOTE_USER@$REMOTE_HOST:$REMOTE_FILE" "$TARGET"
 
 
-#### ================================
-####   Integritätscheck (SHA256)
-#### ================================
+### ================================
+###   Integritätscheck (SHA256)
+### ================================
 remote_sum=$("${SSHPASS_PREFIX[@]}" ssh "${SSH_OPTS[@]}" "$REMOTE_USER@$REMOTE_HOST" "sha256sum '$REMOTE_FILE' | awk '{print\$1}'") local_sum=$(sha256sum "$TARGET" | awk '{print \$1}')
 if [[ "$remote_sum" != "$local_sum" ]]; then
   echo "FEHLER: Checksumme stimmt nicht überein!" >&2
@@ -151,13 +151,13 @@ if [[ "$remote_sum" != "$local_sum" ]]; then
 fi
 
 
-#### ================================
-####   Log / Ausgabe
-#### ================================
-##### Log-Zeile enthält: Laufzeit, Ziel, Checksumme, benutzter Zeitstempel (birth/mtime) + EPOCH
+### ================================
+###   Log / Ausgabe
+### ================================
+#### Log-Zeile enthält: Laufzeit, Ziel, Checksumme, benutzter Zeitstempel (birth/mtime) + EPOCH
 msg="$(date -Iseconds) – Backup ok: $TARGET (sha256 $local_sum) – source_time=${used_label}:${TS_HUMAN} (epoch ${used_epoch})"
 echo "$msg"
-##### Ins Log schreiben (falls Pfad beschreibbar ist)
+#### Ins Log schreiben (falls Pfad beschreibbar ist)
 { echo "$msg"; } | tee -a "$LOG_FILE" >/dev/null || true
 
 
