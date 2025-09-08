@@ -39,9 +39,9 @@ sshpass -V                              # Version prüfen (optional)
 set -Eeuo pipefail
 
 
-#### ================================
-####   Einstellungen Quelle / Ziel
-#### ================================
+### ================================
+###   Einstellungen Quelle / Ziel
+### ================================
 REMOTE_USER="marcel"                       # Remote-User*
 REMOTE_HOST="192.168.1.117"                # Remote-Host / IP*
 REMOTE_FILE="/home/marcel/b1.txt"          # Remote-Datei Die zu Backupen ist*
@@ -49,9 +49,9 @@ LOCAL_DIR="/home/marcel/Desktop/backuppool"  # Lokaler Zielordner der gebacupten
 LOG_FILE="/var/log/remote_b1_backup.log"   # Logdatei (Root-Recht nötig)
 
 
-#### ================================
-####   SSH-Setup
-#### ================================
+### ================================
+###   SSH-Setup
+### ================================
 SSH_PORT=22
 SSH_KEY=""                                  # Angeben wenn du mitels SSH-Schlüssel die anmelden wilst. z.b /home/server1/.ssh/id_ed25519; leer -> Standard-Key/Agent
 
