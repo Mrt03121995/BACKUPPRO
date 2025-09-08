@@ -68,18 +68,18 @@ PASSWORD_FILE=""                            # Besser: Datei mit NUR dem Passwort
 ### ================================
 mkdir -p "$LOCAL_DIR"                       # Setzt angegebener Speicherort.
 
-##### SSH-Optionen (Fingerprints beim ersten Mal automatisch annehmen)
+###### SSH-Optionen (Fingerprints beim ersten Mal automatisch annehmen)
 SSH_OPTS=(-p "$SSH_PORT" -o StrictHostKeyChecking=accept-new -o ConnectTimeout=10)
 [[ -n "$SSH_KEY" ]] && SSH_OPTS+=(-i "$SSH_KEY")
 
-##### Prefix für ssh/rsync, falls Passwort-Login verwendet wird
+###### Prefix für ssh/rsync, falls Passwort-Login verwendet wird
 SSHPASS_PREFIX=()
 if [[ -n "$PASSWORD_FILE" ]]; then
   SSHPASS_PREFIX=(sshpass -f "$PASSWORD_FILE")
 elif [[ -n "$PASSWORD" ]]; then
   SSHPASS_PREFIX=(sshpass -p "$PASSWORD")
 fi
-##### Prüfen, ob sshpass installiert ist, wenn gebraucht
+###### Prüfen, ob sshpass installiert ist, wenn gebraucht
 if [[ ${#SSHPASS_PREFIX[@]} -gt 0 ]]; then
   command -v sshpass >/dev/null || { echo "FEHLER: sshpass ist nicht installiert."; exit 3; }
 fi
@@ -111,10 +111,10 @@ TS_HUMAN=$(date -u -d "@${used_epoch}" "+%Y-%m-%dT%H%M%SZ")
 ### ================================
 ###   Zieldateinamen mit Datum bauen
 ### ================================
-##### Original-Basename zerlegen: Name + Erweiterung
+###### Original-Basename zerlegen: Name + Erweiterung
 BASENAME=$(basename "$REMOTE_FILE")
 if [[ "$BASENAME" == .* || "$BASENAME" != *.* ]]; then
-  ###### Keine/verborgene Erweiterung -> einfach Suffix anhängen
+  ####### Keine/verborgene Erweiterung -> einfach Suffix anhängen
   NAME="$BASENAME"
   EXT=""
 else
@@ -142,10 +142,10 @@ fi
 ### ================================
 ###   Log / Ausgabe
 ### ================================
-##### Log-Zeile enthält: Laufzeit, Ziel, Checksumme, benutzter Zeitstempel (birth/mtime) + EPOCH
+###### Log-Zeile enthält: Laufzeit, Ziel, Checksumme, benutzter Zeitstempel (birth/mtime) + EPOCH
 msg="$(date -Iseconds) – Backup ok: $TARGET (sha256 $local_sum) – source_time=${used_label}:${TS_HUMAN} (epoch ${used_epoch})"
 echo "$msg"
-##### Ins Log schreiben (falls Pfad beschreibbar ist)
+###### Ins Log schreiben (falls Pfad beschreibbar ist)
 { echo "$msg"; } | tee -a "$LOG_FILE" >/dev/null || true
 
 
