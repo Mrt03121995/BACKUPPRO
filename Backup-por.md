@@ -137,7 +137,7 @@ RSYNC_SSH="ssh ${SSH_OPTS[*]}"
 #### ================================
 ####   Integritätscheck (SHA256)
 #### ================================
-remote_sum=$("${SSHPASS_PREFIX[@]}" ssh "${SSH_OPTS[@]}" "$REMOTE_USER@$REMOTE_HOST" "sha256sum '$REMOTE_FILE' | awk '{print \$1}'")local_sum=$(sha256sum "$TARGET" | awk '{print $1}')
+remote_sum=$("${SSHPASS_PREFIX[@]}" ssh "${SSH_OPTS[@]}" "$REMOTE_USER@$REMOTE_HOST" "sha256sum '$REMOTE_FILE' | awk '{print \$1}'")local_sum=$(sha256sum "$TARGET" | awk '{print \$1}')
 if [[ "$remote_sum" != "$local_sum" ]]; then
   echo "FEHLER: Checksumme stimmt nicht überein!" >&2
   exit 2
