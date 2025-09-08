@@ -13,8 +13,8 @@ Schreiben eines Skripts mit einer kleinen Dokumentation.
 4. Die Automatisierung wird auch Dokumentiert
 
 ### Infrastuktur 
-localhost Server (192.168.1.120)
-(Remote) Pc (192.168.1.117)
+- localhost Server (192.168.1.120)
+- (Remote) Pc (192.168.1.117)
 
 #### Umgebungsvariablen
 Datei "b1.txt" ist von dem Remote-pc auf den localserver zu backupen.
@@ -120,7 +120,7 @@ if [[ "$BASENAME" == .* || "$BASENAME" != *.* ]]; then
 else
   NAME="${BASENAME%.*}"
   EXT=".${BASENAME##*.}"fi
-##### Ziel: name_TIMESTAMP.ext  (z.B. b1_2025-09-04T082206Z.txt)
+###### Ziel: name_TIMESTAMP.ext  (z.B. b1_2025-09-04T082206Z.txt)
 TARGET="$LOCAL_DIR/${NAME}_${TS_HUMAN}${EXT}"
 
 ### ================================
