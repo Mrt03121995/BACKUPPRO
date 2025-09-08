@@ -97,10 +97,10 @@ fi
 "${SSHPASS_PREFIX[@]}" ssh "${SSH_OPTS[@]}" "$REMOTE_USER@$REMOTE_HOST" "test -r '$REMOTE_FILE'"
 
 
-##### 2) Zeitstempel der Remote-Datei ermitteln:
-#####    - %W = Birth/Erschaffung in EPOCH (sek)  (-1 falls nicht verfügbar)
-#####    - %Y = Mtime/Änderungszeit in EPOCH (sek)
-#####    Wir nutzen Birth, falls vorhanden; sonst Mtime.
+###### 2) Zeitstempel der Remote-Datei ermitteln:
+######    - %W = Birth/Erschaffung in EPOCH (sek)  (-1 falls nicht verfügbar)
+######    - %Y = Mtime/Änderungszeit in EPOCH (sek)
+######    Wir nutzen Birth, falls vorhanden; sonst Mtime.
 ts_line=$("${SSHPASS_PREFIX[@]}" ssh "${SSH_OPTS[@]}" "$REMOTE_USER@$REMOTE_HOST" "stat -c '%W %Y' '$REMOTE_FILE'")
 birth_epoch=$(awk '{print $1}' <<<"$ts_line")
 mtime_epoch=$(awk '{print $2}' <<<"$ts_line")
@@ -120,7 +120,7 @@ TS_HUMAN=$(date -u -d "@${used_epoch}" "+%Y-%m-%dT%H%M%SZ")
 #### ================================
 ####   Zieldateinamen mit Datum bauen
 #### ================================
-#### Original-Basename zerlegen: Name + Erweiterung
+##### Original-Basename zerlegen: Name + Erweiterung
 BASENAME=$(basename "$REMOTE_FILE")
 if [[ "$BASENAME" == .* || "$BASENAME" != *.* ]]; then
   ##### Keine/verborgene Erweiterung -> einfach Suffix anhängen
@@ -154,10 +154,10 @@ fi
 #### ================================
 ####   Log / Ausgabe
 #### ================================
-#### Log-Zeile enthält: Laufzeit, Ziel, Checksumme, benutzter Zeitstempel (birth/mtime) + EPOCH
+##### Log-Zeile enthält: Laufzeit, Ziel, Checksumme, benutzter Zeitstempel (birth/mtime) + EPOCH
 msg="$(date -Iseconds) – Backup ok: $TARGET (sha256 $local_sum) – source_time=${used_label}:${TS_HUMAN} (epoch ${used_epoch})"
 echo "$msg"
-#### Ins Log schreiben (falls Pfad beschreibbar ist)
+##### Ins Log schreiben (falls Pfad beschreibbar ist)
 { echo "$msg"; } | tee -a "$LOG_FILE" >/dev/null || true
 
 
