@@ -38,6 +38,7 @@ sshpass -V                              # Version prüfen (optional)
 #!/usr/bin/env bash
 set -Eeuo pipefail
 
+
 #### ================================
 ####   Einstellungen Quelle / Ziel
 #### ================================
@@ -46,6 +47,7 @@ REMOTE_HOST="192.168.1.117"                # Remote-Host / IP*
 REMOTE_FILE="/home/marcel/b1.txt"          # Remote-Datei Die zu Backupen ist*
 LOCAL_DIR="/home/marcel/Desktop/backuppool"  # Lokaler Zielordner der gebacupten datei (ohne Leerzeichen!)*
 LOG_FILE="/var/log/remote_b1_backup.log"   # Logdatei (Root-Recht nötig)
+
 
 #### ================================
 ####   SSH-Setup
@@ -58,11 +60,13 @@ if [[ -z "${SSH_KEY}" && "${SUDO_USER-}" && -r "/home/${SUDO_USER}/.ssh/id_ed255
   SSH_KEY="/home/${SUDO_USER}/.ssh/id_ed25519"
 fi
 
+
 #### ================================
 ####   OPTIONAL: Passwort-Login (sshpass)  Sicherer ist Key-Login -> beide Felder leer lassen!
 #### ================================
 PASSWORD=""                                 # Möglichkeit: Passwort anzugeben.
 PASSWORD_FILE=""                            # Besser: Datei mit NUR dem Passwort, z.B. /root/.ssh/remote_pw (600)
+
 
 #### ================================
 ####   Vorbereitung
@@ -72,6 +76,7 @@ mkdir -p "$LOCAL_DIR"                       # Setzt angegebener Speicherort.
 #### SSH-Optionen (Fingerprints beim ersten Mal automatisch annehmen)
 SSH_OPTS=(-p "$SSH_PORT" -o StrictHostKeyChecking=accept-new -o ConnectTimeout=10)
 [[ -n "$SSH_KEY" ]] && SSH_OPTS+=(-i "$SSH_KEY")
+
 
 #### Prefix für ssh/rsync, falls Passwort-Login verwendet wird
 SSHPASS_PREFIX=()
@@ -91,6 +96,7 @@ fi
 ##### 1) Sicherstellen, dass die Datei remote existiert und lesbar ist
 "${SSHPASS_PREFIX[@]}" ssh "${SSH_OPTS[@]}" "$REMOTE_USER@$REMOTE_HOST" "test -r '$REMOTE_FILE'"
 
+
 ##### 2) Zeitstempel der Remote-Datei ermitteln:
 #####    - %W = Birth/Erschaffung in EPOCH (sek)  (-1 falls nicht verfügbar)
 #####    - %Y = Mtime/Änderungszeit in EPOCH (sek)
@@ -106,8 +112,10 @@ else
   used_label="mtime"
 fi
 
+
 ##### 3) Zeitstempel hübsch formatieren (UTC, ISO-ähnlich, ohne Doppelpunkte für Dateinamen) Beispiel: 2025-09-04T082206Z
 TS_HUMAN=$(date -u -d "@${used_epoch}" "+%Y-%m-%dT%H%M%SZ")
+
 
 #### ================================
 ####   Zieldateinamen mit Datum bauen
@@ -124,12 +132,14 @@ else
 ##### Ziel: name_TIMESTAMP.ext  (z.B. b1_2025-09-04T082206Z.txt)
 TARGET="$LOCAL_DIR/${NAME}_${TS_HUMAN}${EXT}"
 
+
 #### ================================
 ####   Kopieren (rsync via ssh)
 #### ================================
 RSYNC_SSH="ssh ${SSH_OPTS[*]}"
 "${SSHPASS_PREFIX[@]}" rsync -a --partial --inplace --progress \
   -e "$RSYNC_SSH" "$REMOTE_USER@$REMOTE_HOST:$REMOTE_FILE" "$TARGET"
+
 
 #### ================================
 ####   Integritätscheck (SHA256)
@@ -140,6 +150,7 @@ if [[ "$remote_sum" != "$local_sum" ]]; then
   exit 2
 fi
 
+
 #### ================================
 ####   Log / Ausgabe
 #### ================================
@@ -148,6 +159,8 @@ msg="$(date -Iseconds) – Backup ok: $TARGET (sha256 $local_sum) – source_tim
 echo "$msg"
 #### Ins Log schreiben (falls Pfad beschreibbar ist)
 { echo "$msg"; } | tee -a "$LOG_FILE" >/dev/null || true
+
+
 
 ## Automatisierung mittels crontab
 crontab -e
